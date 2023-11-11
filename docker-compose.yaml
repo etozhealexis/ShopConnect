@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+
+  shopconnect-db:
+    container_name: shopconnect-db
+    image: postgres:14.1-alpine
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRS_USER: ${SHOPCONNECT_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${SHOPCONNECT_DB_PASSWORD:-12345}
+      POSTGRES_DB: shopconnect-db
+    restart: always
+
+  shopconnect:
+    container_name: shopconnect
+    image: etozhealexis/it-projects:shopconnect
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      _JAVA_OPTIONS: -Xmx256m
+      SHOPCONNECT_DB_USER: ${SHOPCONNECT_DB_USER:-postgres}
+      SHOPCONNECT_DB_PASSWORD: ${SHOPCONNECT_DB_PASSWORD:-12345}
+      SHOPCONNECT_DB_HOST: ${SHOPCONNECT_DB_HOST:-shopconnect-db}
+      SHOPCONNECT_DB_PORT: ${SHOPCONNECT_DB_PORT:-5432}
+    depends_on:
+      - shopconnect-db

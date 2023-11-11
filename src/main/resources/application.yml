@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${SHOPCONNECT_DB_HOST:localhost}:${SHOPCONNECT_DB_PORT:5432}/shopconnect-db
+    username: ${SHOPCONNECT_DB_USER:postgres}
+    password: ${SHOPCONNECT_DB_PASSWORD:12345}
+    driver-class-name: org.postgresql.Driver
+
+  thymeleaf:
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+
+  profiles:
+    active: Prom
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
